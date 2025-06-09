@@ -1,0 +1,17 @@
+create table istehsalat_teqvimi(
+ay varchar2(20),
+is_saati number,
+is_gunleri number
+);
+insert into istehsalat_teqvimi values('january',151,19);
+insert into istehsalat_teqvimi values('february',159,20);
+insert into istehsalat_teqvimi values('march',118,15);
+insert into istehsalat_teqvimi values('april',159,20);
+insert into istehsalat_teqvimi values('may',166,21);
+insert into istehsalat_teqvimi values('jun',126,16);
+insert into istehsalat_teqvimi values('july',184,23);
+insert into istehsalat_teqvimi values('august',176,22);
+insert into istehsalat_teqvimi values('september',168,21);
+insert into istehsalat_teqvimi values('october',184,23);
+insert into istehsalat_teqvimi values('november',151,19);
+insert into istehsalat_teqvimi values('december',159,20);
