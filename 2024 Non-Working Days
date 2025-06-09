@@ -1,0 +1,34 @@
+
+create table qeyri_is_gunleri(
+gun date );
+
+insert into qeyri_is_gunleri values('01-jan-2024');
+insert into qeyri_is_gunleri values('02-jan-2024');
+insert into qeyri_is_gunleri values('03-jan-2024');
+insert into qeyri_is_gunleri values('04-jan-2024');
+insert into qeyri_is_gunleri values('05-jan-2024');
+insert into qeyri_is_gunleri values('07-feb-2024');
+insert into qeyri_is_gunleri values('20-mar-2024');
+insert into qeyri_is_gunleri values('08-mar-2024');
+insert into qeyri_is_gunleri values('21-mar-2024');
+insert into qeyri_is_gunleri values('22-mar-2024');
+insert into qeyri_is_gunleri values('23-mar-2024');
+insert into qeyri_is_gunleri values('24-mar-2024');
+insert into qeyri_is_gunleri values('25-mar-2024');
+insert into qeyri_is_gunleri values('26-mar-2024');
+insert into qeyri_is_gunleri values('10-apr-2024');
+insert into qeyri_is_gunleri values('11-apr-2024');
+insert into qeyri_is_gunleri values('09-may-2024');
+insert into qeyri_is_gunleri values('28-may-2024');
+insert into qeyri_is_gunleri values('15-jun-2024');
+insert into qeyri_is_gunleri values('18-jun-2024');
+insert into qeyri_is_gunleri values('19-jun-2024');
+insert into qeyri_is_gunleri values('26-jun-2024');
+insert into qeyri_is_gunleri values('16-jun-2024');
+insert into qeyri_is_gunleri values('17-jun-2024');
+insert into qeyri_is_gunleri values('08-nov-2024');
+insert into qeyri_is_gunleri values('09-nov-2024');
+insert into qeyri_is_gunleri values('11-nov-2024');
+insert into qeyri_is_gunleri values('23-dec-2024');
+insert into qeyri_is_gunleri values('31-dec-2024');
+
