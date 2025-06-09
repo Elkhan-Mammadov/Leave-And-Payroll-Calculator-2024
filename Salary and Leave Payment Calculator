@@ -1,0 +1,128 @@
+declare
+orta_emek_haqqi varchar2(30):='&EMEK_HAQQI';
+date1 date :=to_date('&BASLAMA_TARIXI','dd-mm-yyyy');
+date2 date :=to_date('&BITME_TARIXI','dd-mm-yyyy');
+hesablanan_emek_haqqi number;
+mezuniyyet_haqqi number;
+mezuniyyet_gunlerinin_sayi number;
+vaxtin_uzadilmasi  number;
+is_gunlerinin_sayi number;
+ise_gedilen_gun_sayi number;
+yekun_mebleg number;
+a number;
+
+begin
+
+-- mezuniyyetin eyni aya dusmesi
+
+if  
+extract(month from date1)= extract(month from date2)and date1<date2
+then
+
+--mezuniyyet is gunune duserse mezuniyyet vaxtinin uzadilmasi 
+
+select count(*) into vaxtin_uzadilmasi from (select date1+level-1 from dual 
+connect by   date1 +level-1  <=
+date2
+intersect
+select gun from qeyri_is_gunleri);
+a:=vaxtin_uzadilmasi;
+
+
+-- mezuniyyet gunlerinin hesablanmasi
+
+select count(*)into mezuniyyet_gunlerinin_sayi from (select date1+level-1 from dual 
+connect by   date1 +level-1  <=
+date2 );
+
+
+-- hemin ayda olan is gunlerinin sayin tapilmasi 
+
+select is_gunleri into is_gunlerinin_sayi from istehsalat_teqvimi
+where ay= trim(to_char(date1,'month')) ;
+
+
+-- ise gedilen ve gedilecek gunlerin sayinin tapilmasi
+
+ select count(*)into ise_gedilen_gun_sayi from( (select trunc(date1,'mm')+level-1 from dual 
+connect by   trunc(date1,'mm')+level-1  <
+date1
+union
+select date2+a +level from dual 
+connect by date2+a +level <=
+last_day(date2) 
+minus
+(select to_date('06-jan-2024','dd-mm-yyyy')+(level-1)*7 from dual 
+connect by to_date('06-jan-2024','dd-mm-yyyy')+
+(level-1)*7<=to_date('31-dec-2024','dd-mm-yyyy')
+union 
+select to_date('07-jan-2024','dd-mm-yyyy')+(level-1)*7 from dual 
+connect by to_date('07-jan-2024','dd-mm-yyyy')+
+(level-1)*7<=to_date('31-dec-2024','dd-mm-yyyy')))
+minus
+select gun from qeyri_is_gunleri) ;
+
+
+--mezuniyyet 2 aya  duserse 
+
+elsif
+extract(month from date1)+1= extract(month from date2) or
+ extract(month from date1)= extract(month from date2)+11
+then
+
+
+-- mezuniyyet gunlerinin hesablanmasi
+
+select count(*)into mezuniyyet_gunlerinin_sayi from (select date1+level-1 from dual 
+connect by   date1 +level-1  <=
+date2 );
+
+
+-- hemin ayda olan is gunlerinin sayin tapilmasi 
+
+select is_gunleri into is_gunlerinin_sayi from istehsalat_teqvimi
+where ay= trim(to_char(date1,'month')) ;
+
+
+-- ise gedilen gunlerin sayinin tapilmasi
+
+ select count(*)into ise_gedilen_gun_sayi from( (select trunc(date1,'mm')+level-1 from dual 
+connect by   trunc(date1,'mm')+level-1  <
+date1 )
+minus
+(select to_date('06-jan-2024','dd-mm-yyyy')+(level-1)*7 from dual 
+connect by to_date('06-jan-2024','dd-mm-yyyy')+
+(level-1)*7<=to_date('31-dec-2024','dd-mm-yyyy')
+union 
+select to_date('07-jan-2024','dd-mm-yyyy')+(level-1)*7 from dual 
+connect by to_date('07-jan-2024','dd-mm-yyyy')+
+(level-1)*7<=to_date('31-dec-2024','dd-mm-yyyy'))
+minus
+select gun from qeyri_is_gunleri) ;
+
+end if;
+mezuniyyet_haqqi:=(orta_emek_haqqi/30.4)*mezuniyyet_gunlerinin_sayi;
+
+hesablanan_emek_haqqi:=(orta_emek_haqqi/is_gunlerinin_sayi)*ise_gedilen_gun_sayi;
+
+yekun_mebleg:=mezuniyyet_haqqi+hesablanan_emek_haqqi;
+
+dbms_output.put_line(' ');
+dbms_output.put_line(' ');
+dbms_output.put_line('--------------------------------------');
+dbms_output.put_line( 'ORTA EMEK HAQQI: '||orta_emek_haqqi||' AZN');
+dbms_output.put_line('--------------------------------------');
+dbms_output.put_line('MEZUNIYYETIN BASLAMA TARIXI: '||date1);
+dbms_output.put_line('--------------------------------------');
+dbms_output.put_line('MEZUNIYYETIN BITME TARIXI: '||date2);
+dbms_output.put_line('--------------------------------------');
+dbms_output.put_line('MEZUNIYYET GUNLERININ SAYI: '||mezuniyyet_gunlerinin_sayi||' GUN');
+dbms_output.put_line('--------------------------------------');
+dbms_output.put_line('MEZUNIYYET HAQQI: '||round(mezuniyyet_haqqi,2)||' AZN');
+dbms_output.put_line('--------------------------------------');
+dbms_output.put_line('HESABLANAN EMEK HAQQI: '||round(hesablanan_emek_haqqi,2)||' AZN');
+dbms_output.put_line('--------------------------------------');
+dbms_output.put_line('UMUMI MEBLEG: '||round(yekun_mebleg,2)||' AZN');
+dbms_output.put_line('--------------------------------------');
+end;
+/
